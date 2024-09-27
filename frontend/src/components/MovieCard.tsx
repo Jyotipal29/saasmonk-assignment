@@ -26,7 +26,9 @@ const MovieCard = ({ movie }: MovieCardProps) => {
     const data = await deleteMovie(id);
 
     if (data.status === 200) {
-      setMovies((prevMovies) => prevMovies.filter((movie) => movie._id !== id));
+      setMovies((prevMovies: Movie[]) =>
+        prevMovies.filter((movie) => movie._id !== id)
+      );
     }
   };
 

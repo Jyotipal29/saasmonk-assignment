@@ -40,28 +40,28 @@ const ReviewForm = () => {
   const clickHandler = async (
     selectMovie: string,
     name: string,
-    rating: string,
+    rating: number,
     comment: string
   ) => {
     if (reviewMode === "add") {
       const data = await addReview({
         movieId: selectMovie,
         reviewerName: name,
-        rating: rating,
+        rating: Number(rating),
         reviewComment: comment,
       });
 
-      setReviews((prev) => [...prev, data?.data]);
+      setReviews((prev: Review[]) => [...prev, data?.data]);
       console.log(data, "reviwed data");
 
-      setReviewMode();
+      setReviewMode(null);
       setName("");
       setRating("");
       setComment("");
       setSelectMovie("");
     } else {
       const { data } = await editReview({
-        rating: rating,
+        rating: Number(rating),
         reviewComment: comment,
         movieId: movie?._id,
         reviewerName: name,
@@ -76,7 +76,7 @@ const ReviewForm = () => {
           )
         );
 
-        setReviewMode();
+        setReviewMode(null);
         setName("");
         setRating("");
         setComment("");
@@ -89,7 +89,7 @@ const ReviewForm = () => {
       <div className="bg-white p-4 md:p-6 border-2 border-gray-400 rounded-md shadow-xl  relative">
         <button
           className="absolute top-2 right-2 text-black  rounded-full"
-          onClick={() => setReviewMode()}
+          onClick={() => setReviewMode(null)}
         >
           <img src={cancelIcon} className="w-8 h-8" />
         </button>
@@ -141,7 +141,9 @@ const ReviewForm = () => {
 
         <button
           className="bg-blue-500   text-white py-2 px-4 rounded-md  flex ml-auto justify-end self-end"
-          onClick={() => clickHandler(selectMovie, name, rating, comment)}
+          onClick={() =>
+            clickHandler(selectMovie, name, Number(rating), comment)
+          }
         >
           {reviewMode === "add" ? "add review" : "Edit review"}
         </button>

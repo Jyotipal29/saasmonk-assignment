@@ -14,7 +14,7 @@ const MovieForm = () => {
     movies,
   } = useCritic();
   const [startDate, setStartDate] = useState(
-    movieMode === "edit" ? selectedMovie?.releaseDate : new Date()
+    movieMode === "edit" ? new Date(selectedMovie?.releaseDate) : new Date()
   );
   const [name, setName] = useState(
     movieMode === "edit" ? selectedMovie?.name : ""
@@ -28,7 +28,7 @@ const MovieForm = () => {
   };
   const clickHandler = async () => {
     if (movieMode === "add") {
-      const { data } = await addMovie({ name, date: startDate });
+      const { data } = await addMovie({ name, date: startDate.toString() });
 
       setMovies((prev) => [...prev, data]);
       setMovieMode(null);
@@ -36,7 +36,7 @@ const MovieForm = () => {
       const { data } = await editMovie({
         id: selectedMovie?._id,
         name: name,
-        date: startDate,
+        date: startDate.toString(),
       });
       updateMovieInArray(data);
       setSelectedMovie(null);
@@ -65,8 +65,10 @@ const MovieForm = () => {
           />
         </div>
         <div className="mb-4">
+          {/*  @ts-expect-error component error */}
           <DatePicker
             selected={startDate}
+            // @ts-expect-error component error
             onChange={(date) => setStartDate(date)}
             className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2 min-w-[300px]  md:min-w-[350px]"
           />
