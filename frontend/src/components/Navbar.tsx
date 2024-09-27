@@ -1,10 +1,13 @@
 import { useCritic } from "../context.tsx";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const { setMovieMode, setReviewMode } = useCritic();
   return (
     <div className=" bg-gray-200 ">
       <div className="h-[80px]  flex justify-between  items-center  w-full  max-w-[1400px] px-[20px] m-auto ">
-        <div className="uppercase text-2xl font-bold  ">moviecritic</div>
+        <div className="uppercase text-2xl font-bold  ">
+          <Link to="/">moviecritic</Link>
+        </div>
 
         <div className="flex gap-10">
           <button

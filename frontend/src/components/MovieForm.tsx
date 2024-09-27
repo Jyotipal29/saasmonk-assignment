@@ -19,7 +19,6 @@ const MovieForm = () => {
     movieMode === "edit" ? selectedMovie.name : ""
   );
 
-  console.log(selectedMovie, "selected movie");
 
   const updateMovieInArray = (editedMovie) => {
     const updatedMovies = movies.map((movie) =>
@@ -32,7 +31,6 @@ const MovieForm = () => {
       const { data } = await addMovie({ name, date: startDate });
 
       setMovies((prev) => [...prev, data]);
-      console.log(data, "data");
       setMovieMode();
     } else {
       const { data } = await editMovie({

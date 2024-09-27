@@ -4,9 +4,10 @@ import { useEffect } from "react";
 import { getAllMovies } from "../service";
 import MovieCard from "../components/MovieCard";
 import MovieForm from "../components/MovieForm";
+import ReviewForm from "../components/ReviewForm";
 import { useCritic } from "../context";
 const Home = () => {
-  const { movieMode, movies, setMovies } = useCritic();
+  const { movieMode, movies, setMovies, reviewMode } = useCritic();
 
   const getData = async () => {
     const { data } = await getAllMovies();
@@ -30,6 +31,8 @@ const Home = () => {
       </div>
 
       {movieMode && <MovieForm />}
+
+      {reviewMode && <ReviewForm />}
     </div>
   );
 };
