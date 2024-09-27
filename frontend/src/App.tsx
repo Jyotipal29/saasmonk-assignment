@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.tsx";
-import Review from "./pages/review.tsx";
+import Review from "./pages/Review.tsx";
 import Navbar from "./components/Navbar.tsx";
 function App() {
   return (
-    <div className="bg-gray-50 h-screen">
+    <div className="">
       <Router>
         <Navbar />
         <Routes>

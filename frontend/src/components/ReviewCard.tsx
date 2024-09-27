@@ -1,17 +1,14 @@
-import React from "react";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/edit.svg";
 import { deleteReview } from "../service/index";
 import { useCritic } from "../context";
-const ReviewCard = ({ review }) => {
-  const {
-    reviews,
-    setReviews,
-    selectedReview,
-    setSelectedReview,
-    setReviewMode,
-  } = useCritic();
-  const deleteHandler = async (id) => {
+
+type ReviewCardProps = {
+  review: Review; // Using the Movie type you defined globally
+};
+const ReviewCard = ({ review }: ReviewCardProps) => {
+  const { setReviews, setSelectedReview, setReviewMode } = useCritic();
+  const deleteHandler = async (id: string) => {
     const data = await deleteReview(id);
     if (data.status === 200) {
       setReviews((prev) => prev.filter((item) => item._id !== id));
@@ -23,8 +20,8 @@ const ReviewCard = ({ review }) => {
         <p className="text-xl capitalize font-semibold  text-gray-900">
           {review.reviewComment}
         </p>
-        <p className="text-xl capitalize font-semibold  text-gray-900">
-          {review.rating}
+        <p className="text-xl capitalize font-semibold  text-purple-600">
+          {review.rating}/10
         </p>
       </div>
       <div className="flex justify-between  items-center">
