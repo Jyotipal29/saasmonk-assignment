@@ -1,9 +1,9 @@
-const Movies = require("../models/movie")
+const Movie = require("../models/movie")
 
 const getMovies = async (req, res) => {
     try {
 
-        const movies = await Movies.find({})
+        const movies = await Movie.find({})
         res.json({
             status: 201, data: movies
         })
@@ -26,7 +26,11 @@ const addMovies = async (req, res) => {
 
         } = req.body;
 
-        const newMovie = new Movies({
+        console.log({
+            name,
+            releaseDate,
+        })
+        const newMovie = await Movie.create({
             name,
             releaseDate
         })
@@ -42,7 +46,30 @@ const addMovies = async (req, res) => {
 
 }
 
+
+const editMovies = async (req, res) => {
+    const { id, name, releaseDate } = req.body;
+
+    try {
+        const movie = await Movie.find({ _id: id })
+        if (!movie) {
+            res.json({ status: 404, message: "Movie not found" })
+        }
+
+        movie.name = name;
+        movie.releaseDate = releaseDate;
+        await movie.save();
+        res.json({ status: 200, data: movie })
+
+
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
 module.exports = {
     getMovies,
-    addMovies
+    addMovies,
+    editMovies
 }

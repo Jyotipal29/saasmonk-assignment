@@ -3,7 +3,8 @@ const router = express.Router();
 
 const {
     getMovies,
-    addMovies
+    addMovies,
+    editMovies
 } = require(
     "../controllers/movieControllers"
 )
@@ -12,6 +13,7 @@ const {
 
 router.get("/", getMovies)
 router.post("/add", addMovies)
+router.post("/edit", editMovies)
 
 
 module.exports = router
