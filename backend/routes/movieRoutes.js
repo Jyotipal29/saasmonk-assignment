@@ -4,7 +4,8 @@ const router = express.Router();
 const {
     getMovies,
     addMovies,
-    editMovies
+    editMovies,
+    deleteMovies
 } = require(
     "../controllers/movieControllers"
 )
@@ -14,6 +15,7 @@ const {
 router.get("/", getMovies)
 router.post("/add", addMovies)
 router.post("/edit", editMovies)
+router.delete("/delete/:id", deleteMovies)
 
 
 module.exports = router
