@@ -30,6 +30,7 @@ const ReviewForm = () => {
     reviewMode === "edit" ? selectedReview?.reviewComment : ""
   );
 
+  const [loading, setLoading] = useState(false);
   const options = movies.map((item) => {
     return {
       id: item._id,
@@ -43,6 +44,7 @@ const ReviewForm = () => {
     rating: number,
     comment: string
   ) => {
+    setLoading(true);
     if (reviewMode === "add") {
       const data = await addReview({
         movieId: selectMovie,
@@ -81,6 +83,7 @@ const ReviewForm = () => {
         setRating("");
         setComment("");
         setSelectMovie("");
+        setLoading(true);
       }
     }
   };
@@ -97,56 +100,66 @@ const ReviewForm = () => {
           {reviewMode === "add" ? "Add new review" : "Edit review"}
         </h1>
 
-        <div className="mb-4">
-          <select
-            value={selectMovie}
-            className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2 min-w-[300px]  md:min-w-[350px]"
-            onChange={(e) => setSelectMovie(e.target.value)}
-          >
-            <option>select a movie</option>
-            {options.map((item) => (
-              <option value={item.id} key={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="your name"
-            className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2   min-w-[300px]  md:min-w-[350px]"
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="text"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            placeholder="Rating out of 10"
-            className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2  min-w-[300px]  md:min-w-[350px]"
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Review comments"
-            className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2 min-w-[300px]  md:min-w-[350px]"
-          />
-        </div>
-
-        <button
-          className="bg-blue-500   text-white py-2 px-4 rounded-md  flex ml-auto justify-end self-end"
-          onClick={() =>
-            clickHandler(selectMovie, name, Number(rating), comment)
-          }
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            clickHandler(selectMovie, name, Number(rating), comment);
+          }}
         >
-          {reviewMode === "add" ? "add review" : "Edit review"}
-        </button>
+          <div className="mb-4">
+            <select
+              value={selectMovie}
+              className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2 min-w-[300px]  md:min-w-[350px]"
+              onChange={(e) => setSelectMovie(e.target.value)}
+            >
+              <option>select a movie</option>
+              {options.map((item) => (
+                <option value={item.id} key={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="your name"
+              className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2   min-w-[300px]  md:min-w-[350px]"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="number"
+              max={10}
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              placeholder="Rating out of 10"
+              className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2  min-w-[300px]  md:min-w-[350px]"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Review comments"
+              className="w-full p-2 border border-gray-300 rounded-md  outline-none py-2 min-w-[300px]  md:min-w-[350px]"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`bg-blue-500  text-white py-2 px-4 rounded-md  flex ml-auto justify-end self-end `}
+            // onClick={() =>
+            //   clickHandler(selectMovie, name, Number(rating), comment)
+            // }
+          >
+            {reviewMode === "add" ? "add review" : "Edit review"}
+          </button>
+        </form>
       </div>
     </div>
   );
