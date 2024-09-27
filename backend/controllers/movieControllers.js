@@ -1,5 +1,5 @@
 const Movie = require("../models/movie")
-
+const Review = require("../models/review");
 const getMovies = async (req, res) => {
     try {
 
@@ -71,7 +71,7 @@ const deleteMovies = async (req, res) => {
 
     try {
         const data = await Movie.deleteOne({ _id: id })
-
+        await Review.deleteMany({ movieId: id });
         res.json({ status: 200, data: data })
     } catch (err) {
         res.status(500).json({ message: err.message });

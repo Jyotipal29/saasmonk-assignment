@@ -23,6 +23,7 @@ const getReviews = async (req, res) => {
 const addReviews = async (req, res) => {
 
     try {
+
         const {
 
             movieId,
@@ -40,7 +41,17 @@ const addReviews = async (req, res) => {
             movieId,
         });
         await newReview.save();
+        const reviews = await Review.find({ movieId });
+        const averageRating = reviews.length
+            ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+            : 0;
 
+        // Update the movie's average rating
+        const movie = await Movie.findById(movieId);
+        if (movie) {
+            movie.averageRating = averageRating;
+            await movie.save();
+        }
 
         res.json({
             status: 201, data: newReview
@@ -67,6 +78,22 @@ const editReviews = async (req, res) => {
         review.reviewComment = reviewComment;
         review.movieId = movieId;
         await review.save();
+
+        const reviews = await Review.find({ movieId });
+        const averageRating = reviews.length
+            ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+            : 0;
+
+        // Update the movie's average rating
+        const movie = await Movie.findById(movieId);
+        if (movie) {
+            movie.averageRating = averageRating;
+            await movie.save();
+        }
+
+
+
+
         res.json({ status: 200, data: review })
 
 
@@ -81,6 +108,18 @@ const deleteReviews = async (req, res) => {
         const review = await Review.findOne({ _id: id });
         if (review) {
             await Review.deleteOne({ _id: req.params.id });
+
+            const reviews = await Review.find({ movieId: review.movieId });
+            const averageRating = reviews.length
+                ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+                : 0;
+
+            // Update the movie's average rating
+            const movie = await Movie.findById(review.movieId);
+            if (movie) {
+                movie.averageRating = averageRating;
+                await movie.save();
+            }
             res.json({ status: 200, message: "Deleted Successfully" });
         }
     } catch (err) {
