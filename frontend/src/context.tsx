@@ -12,6 +12,7 @@ export const CriticProvider = ({ children }: UserProviderProps) => {
   const [movieMode, setMovieMode] = useState();
   const [reviewMode, setReviewMode] = useState();
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState();
 
   return (
     <criticContext.Provider
@@ -22,6 +23,8 @@ export const CriticProvider = ({ children }: UserProviderProps) => {
         setReviewMode,
         movies,
         setMovies,
+        selectedMovie,
+        setSelectedMovie,
       }}
     >
       {children}

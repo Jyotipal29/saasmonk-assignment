@@ -2,11 +2,31 @@ import { useCritic } from "../context";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { addMovie } from "../service";
+import { addMovie, editMovie } from "../service";
 const MovieForm = () => {
-  const { movieMode, setMovieMode, setMovies } = useCritic();
-  const [startDate, setStartDate] = useState(new Date());
-  const [name, setName] = useState("");
+  const {
+    movieMode,
+    setMovieMode,
+    setMovies,
+    selectedMovie,
+    setSelectedMovie,
+    movies,
+  } = useCritic();
+  const [startDate, setStartDate] = useState(
+    movieMode === "edit" ? selectedMovie.releaseDate : new Date()
+  );
+  const [name, setName] = useState(
+    movieMode === "edit" ? selectedMovie.name : ""
+  );
+
+  console.log(selectedMovie, "selected movie");
+
+  const updateMovieInArray = (editedMovie) => {
+    const updatedMovies = movies.map((movie) =>
+      movie._id === editedMovie._id ? editedMovie : movie
+    );
+    setMovies(updatedMovies);
+  };
   const clickHandler = async () => {
     if (movieMode === "add") {
       const { data } = await addMovie({ name, date: startDate });
@@ -15,7 +35,14 @@ const MovieForm = () => {
       console.log(data, "data");
       setMovieMode();
     } else {
-      console.log("edit here");
+      const { data } = await editMovie({
+        id: selectedMovie._id,
+        name: name,
+        date: startDate,
+      });
+      updateMovieInArray(data);
+      setSelectedMovie();
+      setMovieMode();
     }
   };
   return (
